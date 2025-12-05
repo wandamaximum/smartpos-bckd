@@ -6,7 +6,7 @@ export async function getAllPO(req: Request, res: Response) {
     const result = await PurchaseOrder.find();
     res.status(200).json({
       success: "true",
-      data: result 
+      data: result,
     });
   } catch (err) {
     console.error(`Error getting Purchase Orders: ${err}`);
@@ -16,3 +16,4 @@ export async function getAllPO(req: Request, res: Response) {
     });
   }
 }
+
