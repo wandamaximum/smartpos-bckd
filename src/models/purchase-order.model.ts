@@ -6,19 +6,22 @@ const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Product name is required."],
     },
     quantity: {
       type: Number,
-      required: true,
+      required: [true, "Product quantity is required."],
+      min: [0, "Quantity cannot be less than 0."],
     },
     unitPrice: {
       type: mongoose.SchemaTypes.Decimal128,
-      required: true,
+      required: [true, "Product price is required."],
+      min: [0, "Unit Price cannot be less than 0."],
     },
     amount: {
       type: mongoose.SchemaTypes.Decimal128,
-      required: true,
+      required: [true, "Product amount is required."],
+      min: [0, "Amount cannot be less than 0."],
     },
   },
   { _id: false },
@@ -28,25 +31,40 @@ const productSchema = new mongoose.Schema(
 const purchaseOrderSchema = new mongoose.Schema({
   orderDate: {
     type: Date,
-    required: true,
+    required: [true, "Order date is required."],
   },
   status: {
     type: String,
-    enum: ["Pending", "Delivered"],
-    required: true,
+    enum: {
+      values: ["Pending", "Delivered"],
+      message: "Order status must only be Pending or Delivered.",
+    },
+    required: [true, "Order status is required."],
   },
-  products: [productSchema],
+  products: {
+    type: [productSchema],
+    required: [true, "Order Products is required."],
+    validate: {
+      validator: function(value: typeof productSchema[]) {
+        return value.length > 0;
+      },
+      message: "Order Products cannot be empty."
+    }
+  },
   subtotal: {
     type: mongoose.SchemaTypes.Decimal128,
-    required: true,
+    required: [true, "Order subtotal is required."],
+    min: [0, "Subtotal cannot be less than 0"],
   },
   tax: {
     type: mongoose.SchemaTypes.Decimal128,
-    required: true,
+    required: [true, "Order tax is required."],
+    min: [0, "Order tax cannot be less than 0"],
   },
   total: {
     type: mongoose.SchemaTypes.Decimal128,
-    required: true,
+    required: [true, "Order total is required."],
+    min: [0, "Order total cannot be less than 0"],
   },
   note: String,
 });
