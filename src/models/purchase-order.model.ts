@@ -45,7 +45,7 @@ const purchaseOrderSchema = new mongoose.Schema({
     type: [productSchema],
     required: [true, "Order Products is required."],
     validate: {
-      validator: function (value: (typeof productSchema)[]) {
+      validator: function (value: any[]) {
         return value.length > 0;
       },
       message: "Order Products cannot be empty.",
